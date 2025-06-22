@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import ProjectView from "./pages/ProjectView";
 import ReduxDemo from "./pages/ReduxDemo";
+import PortfolioReduxDemo from "./pages/PortfolioReduxDemo";
 import Footer from "./pages/miniComponents/Footer";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -18,6 +19,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/project/:id" element={<ProjectView />} />
           <Route path="/redux-demo" element={<ReduxDemo />} />
+          <Route path="/portfolio-redux" element={<PortfolioReduxDemo />} />
         </Routes>
         <Footer />
         <ToastContainer position="bottom-right" theme="dark" />
