@@ -1,6 +1,6 @@
-import { configureStore } from '@reduxjs/toolkit';
-import counterSlice from './slices/counterSlice';
-import userSlice from './slices/userSlice';
+import { configureStore } from "@reduxjs/toolkit";
+import counterSlice from "./slices/counterSlice";
+import userSlice from "./slices/userSlice";
 
 export const store = configureStore({
   reducer: {
@@ -10,10 +10,7 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE'],
+        ignoredActions: ["persist/PERSIST", "persist/REHYDRATE"],
       },
     }),
 });
-
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
