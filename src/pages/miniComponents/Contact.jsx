@@ -1,39 +1,61 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import {
+  sendMessage,
+  clearContactState,
+} from "../../store/slices/contactSlice";
 
 const Contact = () => {
   const [senderName, setSenderName] = useState("");
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false);
+
+  const dispatch = useAppDispatch();
+  const {
+    loading,
+    success,
+    error,
+    message: successMessage,
+  } = useAppSelector((state) => state.contact);
+
+  useEffect(() => {
+    if (success) {
+      toast.success(successMessage || "Message sent successfully!");
+      setSenderName("");
+      setSubject("");
+      setMessage("");
+      dispatch(clearContactState());
+    }
+  }, [success, successMessage, dispatch]);
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      dispatch(clearContactState());
+    }
+  }, [error, dispatch]);
+
   const handleMessage = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    await axios
-      .post(
-        "https://mern-stack-portfolio-backend-code.onrender.com/api/v1/message/send",
-        { senderName, subject, message },
-        {
-          withCredentials: true,
-          headers: { "Content-Type": "application/json" },
-        }
-      )
-      .then((res) => {
-        toast.success(res.data.message);
-        setSenderName("");
-        setSubject("");
-        setMessage("");
-        setLoading(false);
-      })
-      .catch((error) => {
-        toast.error(error.response.data.message);
-        setLoading(false);
-      });
+
+    if (!senderName || !subject || !message) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+
+    dispatch(
+      sendMessage({
+        senderName,
+        subject,
+        message,
+      }),
+    );
   };
+
   return (
     <>
       <div className="overflow-x-hidden">
@@ -49,8 +71,10 @@ const Contact = () => {
             CONTACT
             <span className="text-tubeLight-effect font-extrabold">ME</span>
           </h1>
-          <span className="absolute w-full h-1 top-7 sm:top-7 
-          md:top-8 lg:top-11 z-[-1] bg-slate-200"></span>
+          <span
+            className="absolute w-full h-1 top-7 sm:top-7 
+          md:top-8 lg:top-11 z-[-1] bg-slate-200"
+          ></span>
         </div>
         <form onSubmit={handleMessage} className="flex flex-col gap-6">
           <div className="flex flex-col gap-2 px-1.5">
@@ -59,6 +83,7 @@ const Contact = () => {
               value={senderName}
               onChange={(e) => setSenderName(e.target.value)}
               placeholder="Your Name"
+              disabled={loading}
             />
           </div>
           <div className="flex flex-col gap-2 px-1.5">
@@ -67,6 +92,7 @@ const Contact = () => {
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
               placeholder="Subject"
+              disabled={loading}
             />
           </div>
           <div className="flex flex-col gap-2 px-1.5">
@@ -75,21 +101,24 @@ const Contact = () => {
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               placeholder="Your Message"
+              disabled={loading}
             />
           </div>
           <div className="flex justify-end">
             {!loading ? (
-              <Button className="w-full sm:w-52">SEND MESSAGE</Button>
+              <Button className="w-full sm:w-52" type="submit">
+                SEND MESSAGE
+              </Button>
             ) : (
               <button
                 disabled
                 type="button"
-                className="w-full sm:w-52 text-slate-900  bg-white hover:bg-slate-200 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 dark:bg-white dark:hover:bg-slate-200 dark:focus:ring-blue-800 inline-flex items-center"
+                className="w-full sm:w-52 text-slate-900 bg-white hover:bg-slate-200 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 dark:bg-white dark:hover:bg-slate-200 dark:focus:ring-blue-800 inline-flex items-center"
               >
                 <svg
                   aria-hidden="true"
                   role="status"
-                  class="inline w-4 h-4 me-3 text-slate-950 animate-spin"
+                  className="inline w-4 h-4 me-3 text-slate-950 animate-spin"
                   viewBox="0 0 100 101"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
