@@ -1,6 +1,6 @@
-# Redux Toolkit Integration
+# Redux Toolkit Integration - Portfolio Edition
 
-This project now includes Redux Toolkit for state management. Redux Toolkit is the official, recommended way to write Redux logic with less boilerplate and better developer experience.
+This project includes comprehensive Redux Toolkit integration for managing all portfolio data and API calls. Redux Toolkit is the official, recommended way to write Redux logic with less boilerplate and better developer experience.
 
 ## 📁 File Structure
 
@@ -8,9 +8,17 @@ This project now includes Redux Toolkit for state management. Redux Toolkit is t
 src/store/
 ├── store.js              # Store configuration
 ├── hooks.js              # Typed hooks for React-Redux
+├── api/
+│   └── apiConfig.js      # API base configuration and endpoints
 ├── slices/
 │   ├── counterSlice.js   # Counter example slice
-│   └── userSlice.js      # User management slice
+│   ├── userSlice.js      # User management slice
+│   ├── profileSlice.js   # User profile data
+│   ├── projectsSlice.js  # Portfolio projects
+│   ├── skillsSlice.js    # Technical skills
+│   ├── timelineSlice.js  # Career timeline
+│   ├── appsSlice.js      # Software applications
+│   └── contactSlice.js   # Contact form management
 └── README.md             # This file
 ```
 
@@ -36,7 +44,71 @@ function MyComponent() {
 }
 ```
 
-## 📦 Included Slices
+## 📦 Portfolio Slices
+
+### Profile Slice
+
+- **State**: `{ user: object | null, loading: boolean, error: string | null }`
+- **Thunks**:
+  - `fetchUserProfile()` - Fetch user profile from API
+- **Actions**:
+  - `clearError()` - Clear error state
+
+### Projects Slice
+
+- **State**:
+  ```js
+  {
+    projects: array,
+    currentProject: object | null,
+    loading: boolean,
+    projectLoading: boolean,
+    error: string | null,
+    projectError: string | null
+  }
+  ```
+- **Thunks**:
+  - `fetchProjects()` - Fetch all projects
+  - `fetchProjectById(id)` - Fetch single project by ID
+- **Actions**:
+  - `clearError()` - Clear error states
+  - `clearCurrentProject()` - Clear current project
+
+### Skills Slice
+
+- **State**: `{ skills: array, loading: boolean, error: string | null }`
+- **Thunks**: `fetchSkills()` - Fetch all skills
+- **Actions**: `clearError()` - Clear error state
+
+### Timeline Slice
+
+- **State**: `{ timeline: array, loading: boolean, error: string | null }`
+- **Thunks**: `fetchTimeline()` - Fetch career timeline
+- **Actions**: `clearError()` - Clear error state
+
+### Apps Slice
+
+- **State**: `{ apps: array, loading: boolean, error: string | null }`
+- **Thunks**: `fetchApps()` - Fetch software applications
+- **Actions**: `clearError()` - Clear error state
+
+### Contact Slice
+
+- **State**:
+  ```js
+  {
+    loading: boolean,
+    success: boolean,
+    error: string | null,
+    message: string | null
+  }
+  ```
+- **Thunks**: `sendMessage(messageData)` - Send contact message
+- **Actions**:
+  - `clearContactState()` - Clear all contact state
+  - `clearError()` - Clear error state
+
+## 📦 Example Slices
 
 ### Counter Slice
 
@@ -106,9 +178,32 @@ export const store = configureStore({
 });
 ```
 
-## 🎯 Demo Page
+## 🎯 Demo Pages
 
-Visit `/redux-demo` to see working examples of both slices in action.
+- **Basic Redux Examples**: Visit `/redux-demo` to see counter and user management examples
+- **Portfolio Redux State**: Visit `/portfolio-redux` to see all portfolio data management in action
+
+## 🚀 Portfolio Integration
+
+All portfolio components now use Redux for state management:
+
+### Components Using Redux:
+
+- **Hero** (`src/pages/miniComponents/Hero.jsx`) - Uses `profileSlice`
+- **Portfolio** (`src/pages/miniComponents/Portfolio.jsx`) - Uses `projectsSlice`
+- **Skills** (`src/pages/miniComponents/Skills.jsx`) - Uses `skillsSlice`
+- **Timeline** (`src/pages/miniComponents/Timeline.jsx`) - Uses `timelineSlice`
+- **MyApps** (`src/pages/miniComponents/MyApps.jsx`) - Uses `appsSlice`
+- **Contact** (`src/pages/miniComponents/Contact.jsx`) - Uses `contactSlice`
+- **ProjectView** (`src/pages/ProjectView.jsx`) - Uses `projectsSlice`
+
+### API Configuration
+
+All API calls are centralized in `src/store/api/apiConfig.js` with:
+
+- Base URL configuration
+- Axios instance with default settings
+- Centralized endpoint definitions
 
 ## 📚 Useful Resources
 
